@@ -9,7 +9,7 @@ import CompanyRouting from "./pages/company/Company.routing"
 import EmployeeRouting from "./pages/employee/Employee.routing"
 import StoreRouting from "./pages/store/Store.routing"
 import CheckOutRouting from "./pages/checkout/CheckOut.routing"
-import TestDinamic from "./pages/test/TestDinamic"
+import CheckInRouting from "./pages/checkin/CheckIn.routing"
 
 export const router = createBrowserRouter([
     {
@@ -59,7 +59,7 @@ export const router = createBrowserRouter([
         children: CheckOutRouting
     },
     {
-        path: 'test',
-        element: <TestDinamic />
+        path: 'checkins',
+        children: CheckInRouting
     }
 ])

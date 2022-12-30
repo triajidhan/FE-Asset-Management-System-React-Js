@@ -27,6 +27,10 @@ const CheckOutInsert = () => {
         }
     })
 
+    const [details, setDetails] = useState([
+        { assetId: '', returnTime: '' }
+    ])
+
     useEffect(() => {
         getAPI('assets/asset-deployables/?type-code=GA01').then(data => setGenAssets(data))
         getAPI('assets/asset-deployables/?type-code=CO01').then(data => setCompAssets(data))
@@ -35,6 +39,7 @@ const CheckOutInsert = () => {
     }, [])
 
     const dataChange = (e) => {
+        console.log(checkOut.data)
         const { name, value } = e.target
         setCheckOut({
             data: {
@@ -44,9 +49,6 @@ const CheckOutInsert = () => {
         })
     }
 
-    const assetChange = (e) => {
-        console.log(e)
-    }
     const placementChange = (e) => {
         setPlacement(e.target.value)
     }
@@ -56,6 +58,33 @@ const CheckOutInsert = () => {
     }
 
     const back = () => navigate(-1)
+
+
+
+    const addField = () => {
+        let newField = { assetId: '', returnTime: '' }
+        setDetails([...details, newField])
+    }
+
+    const removeField = (idx) => {
+        let data = [...details]
+        data.splice(idx, 1)
+        setDetails(data)
+    }
+
+    const detailChange = (idx, e) => {
+        const { name, value } = e.target
+        let data = [...details]
+        data[idx][name] = value
+        setDetails(data)
+        setCheckOut({
+            data: {
+                ...checkOut.data,
+                checkOutDetails: details
+            }
+        })
+    }
+
 
     return (
         <>
@@ -94,19 +123,55 @@ const CheckOutInsert = () => {
                                     </Form.Group>
                                 </Col>
                             } {(placement === checkOutTo[0].placement || placement === checkOutTo[2].placement) &&
-                                <Col md={6}>
-                                    <Form.Group className="mb-3">
-                                        <DropdownOption data={assets} title="Asset name" name="assetName"
-                                            onChange={assetChange} optionTitle="Choose asset" option="assetName" value="id" />
-                                    </Form.Group>
-                                </Col>
-                            } {placement === checkOutTo[2].placement &&
-                                <Col md={6}>
-                                    <Form.Group className="mb-3">
-                                        <DropdownOption data={compAssets} title="Component asset name" name="assetName"
-                                            onChange={assetChange} optionTitle="Choose asset" option="assetName" value="id" />
-                                    </Form.Group>
-                                </Col>
+                                <>
+                                    <Col xs={12}>
+                                        <Button variant="success" className="my-3" onClick={addField}>Add</Button>
+                                    </Col>
+                                    {details.map((val, idx) => {
+                                        return (
+                                            <Col xs={12} as={Row} key={idx}>
+                                                <Col md={6}>
+                                                    <Form.Group className="mb-3">
+                                                        <DropdownOption data={assets} title="Asset name" name="assetId" item={val.assetId}
+                                                            onChange={e => detailChange(idx, e)} optionTitle="Choose asset" option="assetName" value="id" />
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col md={6} key={idx}>
+                                                    <Form.Label>Return time </Form.Label>
+                                                    <Form.Group className="mb-3 d-flex">
+                                                        <Form.Control name="returnTime" type="datetime-local" onChange={e => detailChange(idx, e)} value={val.returnTime} />
+                                                        <Button variant="danger" onClick={() => removeField(idx)}>Delete</Button>
+                                                    </Form.Group>
+                                                </Col>
+                                            </Col>
+                                        )
+                                    })}
+                                </>
+                            } {placement === checkOutTo[1].placement &&
+                                <>
+                                    <Col xs={12}>
+                                        <Button variant="success" className="my-3" onClick={addField}>Add</Button>
+                                    </Col>
+                                    {details.map((val, idx) => {
+                                        return (
+                                            <Col xs={12} as={Row} key={idx}>
+                                                <Col md={6}>
+                                                    <Form.Group className="mb-3">
+                                                        <DropdownOption data={compAssets} title="Asset name" name="assetId" item={val.assetId}
+                                                            onChange={e => detailChange(idx, e)} optionTitle="Choose asset" option="assetName" value="id" />
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col md={6} key={idx}>
+                                                    <Form.Label>Return time </Form.Label>
+                                                    <Form.Group className="mb-3 d-flex">
+                                                        <Form.Control name="returnTime" type="datetime-local" onChange={e => detailChange(idx, e)} value={val.returnTime} />
+                                                        <Button variant="danger" onClick={() => removeField(idx)}>Delete</Button>
+                                                    </Form.Group>
+                                                </Col>
+                                            </Col>
+                                        )
+                                    })}
+                                </>
                             }
                             <Col xs={12}>
                                 <Button onClick={insertCheckOut} variant="primary" type="button">

@@ -15,11 +15,12 @@ const CheckOutList = () => {
         getAPI('checkouts').then(data => setCheckOuts(data))
     }
 
+
     return (
         <>
             <Header />
             <Container>
-                <h2 className="my-3">Checkout List</h2>
+                <h2 className="my-3">Checkout List </h2>
                 <Link to="/checkouts/new">
                     <Button className="mb-3">Insert</Button>
                 </Link>
@@ -43,11 +44,11 @@ const CheckOutList = () => {
                                     <td>{val.checkOutTrx}</td>
                                     <td>{val.checkOutTime}</td>
                                     <td>{val.placement ? val.placement : '-'}</td>
-                                    <td>{val.assetName ? val.assetName : '-'}</td>
                                     <td>{val.employeeName ? val.employeeName : '-'}</td>
+                                    <td>{val.assetName ? val.assetName : '-'}</td>
                                     <td className="text-center">
                                         <Link to={"/checkouts/details/" + val.id}>
-                                            <Button variant="primary">Show Detail</Button>
+                                            <Button variant="success">Show Detail</Button>
                                         </Link>
                                     </td>
                                 </tr>
