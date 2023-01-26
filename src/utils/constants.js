@@ -2,7 +2,10 @@ import axios from "axios"
 
 export const API_URL = "http://localhost:8080/"
 export const fileUrl = API_URL + "files/download/"
-const authStr = 'Bearer ' + JSON.parse(localStorage.getItem('data')).token
+export let authStr = ''
+if (localStorage.getItem('data')) {
+    authStr = 'Bearer ' + JSON.parse(localStorage.getItem('data')).token
+}
 const authorization = { 'headers': { 'Authorization': authStr } }
 
 export const getAPI = async (url) => {

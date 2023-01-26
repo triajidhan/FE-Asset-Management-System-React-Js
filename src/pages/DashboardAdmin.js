@@ -1,12 +1,19 @@
 import { Header } from "../components/Header"
+import { connect } from 'react-redux'
 
-const DashboardAdmin = () => {
+const DashboardAdmin = (props) => {
     return (
         <>
             <Header />
-            <h1>Dashboard Non Admin</h1>
+            <h1>Dashboard Non Admin {props.order}</h1>
         </>
     )
 }
 
-export default DashboardAdmin
+const mapStateToProps = state => {
+    return {
+        order: state.totalOrder
+    }
+}
+
+export default connect(mapStateToProps)(DashboardAdmin)
